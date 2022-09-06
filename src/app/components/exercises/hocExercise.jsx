@@ -1,5 +1,42 @@
 import React from "react";
+import CardWrapper from "../common/Card";
 import CollapseWrapper from "../common/collapse";
+import PropTypes from "prop-types";
+import SmallTitle from "../common/typografy/smallTitle";
+
+const SimpleComponent = ({ onLogin, onLogOut, isAuth }) => {
+    return isAuth ? (
+        <button className="btn btn-secondary m-2" onClick={onLogOut}>
+            Выйти
+        </button>
+    ) : (
+        <button className="btn btn-secondary m-2" onClick={onLogin}>
+            Войти
+        </button>
+    );
+};
+
+const withFunctions = (Component) => (props) => {
+    const handleLogin = () => {
+        localStorage.setItem("auth", "token");
+    };
+    const handleLogOut = () => {
+        localStorage.removeItem("auth");
+    };
+    const isAuth = !!localStorage.getItem("auth"); // !! возвращает булевый тип(не)
+    return (
+        <CardWrapper>
+            <Component
+                onLogin={handleLogin}
+                onLogOut={handleLogOut}
+                isAuth={isAuth}
+                {...props}
+            />
+        </CardWrapper>
+    );
+};
+
+const ComponentWithHoc = withFunctions(SimpleComponent);
 
 const HocExercise = () => {
     return (
@@ -76,8 +113,16 @@ const HocExercise = () => {
                 <code>SimpleComponent</code> обновится после перезагрузки
                 страницы
             </p>
+            <SmallTitle>Кнопка</SmallTitle>
+            <ComponentWithHoc />
         </CollapseWrapper>
     );
+};
+
+SimpleComponent.propTypes = {
+    onLogin: PropTypes.func,
+    onLogOut: PropTypes.func,
+    isAuth: PropTypes.string
 };
 
 export default HocExercise;

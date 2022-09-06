@@ -8,6 +8,7 @@ const UseRefExercise = () => {
         buttonRef.current.style.height = "80px"; // ширина 80
         buttonRef.current.style.width = "150px"; // высота 150
     };
+
     return (
         <CollapseWrapper title="Упражнение">
             <p className="mt-3">
